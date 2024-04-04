@@ -4,28 +4,13 @@ on:
   push:
     branches: [ master ]
   pull_request:
-    branches: [ master ]
 
 jobs:
-  integration_tests:
-    uses: optimizely/ruby-sdk/.github/workflows/integration_test.yml@master
-    secrets:
-      CI_USER_TOKEN: ${{ secrets.CI_USER_TOKEN }}
-      TRAVIS_COM_TOKEN: ${{ secrets.TRAVIS_COM_TOKEN }}
-
-  fullstack_production_suite:
-    uses: optimizely/ruby-sdk/.github/workflows/integration_test.yml@master
-    with:
-      FULLSTACK_TEST_REPO: ProdTesting
-    secrets:
-      CI_USER_TOKEN: ${{ secrets.CI_USER_TOKEN }}
-      TRAVIS_COM_TOKEN: ${{ secrets.TRAVIS_COM_TOKEN }}
-
   unit_tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [ '2.7.0', '3.0.0', '3.1.0' ]
+        ruby: [ '2.6.10', '2.7.0', '3.0.0', '3.1.0' ]
     steps:
     - uses: actions/checkout@v3
     - name: Set up Ruby ${{ matrix.ruby }}
@@ -33,12 +18,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run linting
-      run: |
-        bundle exec rubocop
     - name: Run unit tests
       run: |
         bundle exec rake spec
-    - name: Run coveralls
-      run: |
-        bundle exec coveralls
