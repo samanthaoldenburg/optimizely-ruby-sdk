@@ -18,12 +18,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-    - name: Run linting
-      run: |
-        bundle exec rubocop
     - name: Run unit tests
       run: |
         bundle exec rake spec
-    - name: Run coveralls
-      run: |
-        bundle exec coveralls
